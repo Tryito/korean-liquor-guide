@@ -2,64 +2,44 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>韓国伝統酒ガイドブック（日本語）</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: #f7f3ed;
-    display: flex;
-    flex-direction: column;
-    min-height: 100dvh;
-  }
+  body { background: #f7f3ed; }
   .header {
-    position: sticky;
-    top: 0;
-    z-index: 10;
+    position: sticky; top: 0; z-index: 10;
     background: rgba(247,243,237,0.95);
     backdrop-filter: blur(8px);
     padding: 12px 16px;
-    display: flex;
-    align-items: center;
+    display: flex; align-items: center;
     border-bottom: 1px solid rgba(139,90,43,0.15);
   }
   .back {
-    text-decoration: none;
-    color: #8b5a2b;
-    font-size: 0.85rem;
-    font-family: 'Noto Serif JP', serif;
+    text-decoration: none; color: #8b5a2b;
+    font-size: 0.85rem; font-family: 'Noto Serif JP', serif;
   }
   .header-title {
-    flex: 1;
-    text-align: center;
+    flex: 1; text-align: center;
     font-family: 'Noto Serif JP', serif;
-    font-size: 0.85rem;
-    color: #3a2a1a;
-    font-weight: 600;
-    padding-right: 40px;
+    font-size: 0.85rem; color: #3a2a1a;
+    font-weight: 600; padding-right: 40px;
   }
-  .pdf-frame {
-    flex: 1;
-    width: 100%;
-    border: none;
+  #pdf-container {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 8px;
+    padding: 12px 0;
   }
-  .fallback {
-    padding: 40px 20px;
-    text-align: center;
-    font-family: sans-serif;
-    color: #5a4a3a;
+  #pdf-container canvas {
+    width: 100%; max-width: 600px;
+    display: block;
   }
-  .fallback a {
-    display: inline-block;
-    margin-top: 16px;
-    padding: 12px 28px;
-    background: #8b5a2b;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 6px;
+  .loading {
+    padding: 60px 20px; text-align: center;
+    color: #8b7355; font-family: 'Noto Serif JP', serif;
     font-size: 0.9rem;
   }
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&display=swap');
 </style>
 </head>
 <body>
@@ -69,29 +49,35 @@
   <div class="header-title">ガイドブック（日本語）</div>
 </div>
 
-<iframe class="pdf-frame" id="pdfViewer"></iframe>
+<div id="loading" class="loading">読み込み中...</div>
+<div id="pdf-container"></div>
 
-<div class="fallback" id="fallback" style="display:none;">
-  <p>PDFを表示できません。<br>下のボタンからダウンロードしてください。</p>
-  <a href="pdf/guide-ja.pdf" download>PDFをダウンロード</a>
-</div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
-  const pdf = 'pdf/guide-ja.pdf';
-  const viewer = document.getElementById('pdfViewer');
-  const fallback = document.getElementById('fallback');
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  const isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
+  const url = 'pdf/guide-ja.pdf';
+  const container = document.getElementById('pdf-container');
+  const loading = document.getElementById('loading');
 
-  if (isMobile) {
-    viewer.src = pdf;
-    viewer.onerror = () => {
-      viewer.style.display = 'none';
-      fallback.style.display = 'block';
-    };
-  } else {
-    viewer.src = pdf;
-  }
+  pdfjsLib.getDocument(url).promise.then(async pdf => {
+    loading.style.display = 'none';
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const scale = window.innerWidth < 600
+        ? (window.innerWidth - 24) / page.getViewport({ scale: 1 }).width
+        : 600 / page.getViewport({ scale: 1 }).width;
+      const viewport = page.getViewport({ scale: scale * 2 });
+      const canvas = document.createElement('canvas');
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      canvas.style.width = (viewport.width / 2) + 'px';
+      container.appendChild(canvas);
+      await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+    }
+  }).catch(() => {
+    loading.innerHTML = 'PDFを表示できません。<br><a href="' + url + '" style="color:#8b5a2b;">ダウンロード</a>';
+  });
 </script>
 
 </body>
