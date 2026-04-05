@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>韓国伝統酒ガイド</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Serif JP', serif;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f7f3ed;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(139,90,43,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 50%, rgba(139,90,43,0.04) 0%, transparent 50%);
+  }
+
+  .container {
+    width: 100%;
+    max-width: 420px;
+    padding: 48px 28px;
+    text-align: center;
+  }
+
+  /* decorative top line */
+  .deco-line {
+    width: 60px;
+    height: 2px;
+    background: #8b5a2b;
+    margin: 0 auto 28px;
+    opacity: 0.5;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #3a2a1a;
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+    color: #8b7355;
+    letter-spacing: 0.08em;
+    margin-bottom: 40px;
+  }
+
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .btn {
+    display: block;
+    text-decoration: none;
+    padding: 18px 20px;
+    border: 1.5px solid #8b5a2b;
+    border-radius: 6px;
+    color: #3a2a1a;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(4px);
+    transition: all 0.25s ease;
+    position: relative;
+  }
+
+  .btn:active {
+    background: #8b5a2b;
+    color: #fff;
+    transform: scale(0.98);
+  }
+
+  .btn .btn-sub {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 400;
+    color: #8b7355;
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+  }
+
+  .btn:active .btn-sub { color: rgba(255,255,255,0.7); }
+
+  /* bottom deco */
+  .footer-deco {
+    margin-top: 48px;
+    font-size: 0.7rem;
+    color: #bba88a;
+    letter-spacing: 0.15em;
+  }
+
+  .footer-deco::before,
+  .footer-deco::after {
+    content: '─── ';
+  }
+  .footer-deco::after {
+    content: ' ───';
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="deco-line"></div>
+  <h1 class="title">韓国伝統酒</h1>
+  <p class="subtitle">Korean Traditional Liquor Guide</p>
+
+  <div class="btn-group">
+    <a href="guide-ko.html" class="btn">
+      韓国伝統酒ガイドブック
+      <span class="btn-sub">韓国語版</span>
+    </a>
+    <a href="guide-ja.html" class="btn">
+      韓国伝統酒ガイドブック
+      <span class="btn-sub">日本語版</span>
+    </a>
+    <a href="products.html" class="btn">
+      日本国内流通酒類キャプション
+    </a>
+  </div>
+
+  <div class="footer-deco">韓国農水産食品流通公社</div>
+</div>
+
+</body>
+</html>
